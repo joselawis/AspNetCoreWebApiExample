@@ -24,18 +24,18 @@ namespace CitiesManager.WebAPI.Controllers
             {
                 return NotFound();
             }
-            return await _context.Cities.ToListAsync();
+            return await _context.Cities.OrderBy(city => city.CityName).ToListAsync();
         }
 
         // GET: api/Cities/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(Guid id)
+        [HttpGet("{cityId}")]
+        public async Task<ActionResult<City>> GetCity(Guid cityId)
         {
             if (_context.Cities == null)
             {
                 return NotFound();
             }
-            var city = await _context.Cities.FindAsync(id);
+            var city = await _context.Cities.FindAsync(cityId);
 
             if (city == null)
             {
@@ -47,10 +47,13 @@ namespace CitiesManager.WebAPI.Controllers
 
         // PUT: api/Cities/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(Guid id, City city)
+        [HttpPut("{cityId}")]
+        public async Task<IActionResult> PutCity(
+            Guid cityId,
+            [Bind(nameof(City.CityId), nameof(City.CityName))] City city
+        )
         {
-            if (id != city.CityId)
+            if (cityId != city.CityId)
             {
                 return BadRequest();
             }
@@ -63,7 +66,7 @@ namespace CitiesManager.WebAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CityExists(id))
+                if (!CityExists(cityId))
                 {
                     return NotFound();
                 }
@@ -79,7 +82,9 @@ namespace CitiesManager.WebAPI.Controllers
         // POST: api/Cities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<ActionResult<City>> PostCity(
+            [Bind(nameof(City.CityId), nameof(City.CityName))] City city
+        )
         {
             if (_context.Cities == null)
             {
@@ -92,14 +97,14 @@ namespace CitiesManager.WebAPI.Controllers
         }
 
         // DELETE: api/Cities/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCity(Guid id)
+        [HttpDelete("{cityId}")]
+        public async Task<IActionResult> DeleteCity(Guid cityId)
         {
             if (_context.Cities == null)
             {
                 return NotFound();
             }
-            var city = await _context.Cities.FindAsync(id);
+            var city = await _context.Cities.FindAsync(cityId);
             if (city == null)
             {
                 return NotFound();
@@ -111,9 +116,9 @@ namespace CitiesManager.WebAPI.Controllers
             return NoContent();
         }
 
-        private bool CityExists(Guid id)
+        private bool CityExists(Guid cityId)
         {
-            return (_context.Cities?.Any(e => e.CityId == id)).GetValueOrDefault();
+            return (_context.Cities?.Any(e => e.CityId == cityId)).GetValueOrDefault();
         }
     }
 }
