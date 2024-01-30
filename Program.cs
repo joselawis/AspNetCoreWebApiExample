@@ -18,8 +18,9 @@ builder
     .Services
     .AddApiVersioning(config =>
     {
-        // config.ApiVersionReader = new UrlSegmentApiVersionReader(); // Reads version number from request url at "apiVersion" constraint /api/v1/cities
-        config.ApiVersionReader = new QueryStringApiVersionReader(); // Reads version from request query string called "api-version" /api/cities?api-version=1.0
+        // config.ApiVersionReader = new UrlSegmentApiVersionReader(); // Reads version number from request url at "apiVersion" constraint. /api/v1/cities
+        // config.ApiVersionReader = new QueryStringApiVersionReader(); // Reads version from request query string called "api-version". /api/cities?api-version=1.0
+        config.ApiVersionReader = new HeaderApiVersionReader("api-version"); // Reads version number from request header called "api-version". api-version: 1.0
 
         config.DefaultApiVersion = new ApiVersion(1, 0);
         config.AssumeDefaultVersionWhenUnspecified = true;
