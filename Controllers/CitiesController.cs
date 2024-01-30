@@ -15,7 +15,12 @@ namespace CitiesManager.WebAPI.Controllers
         }
 
         // GET: api/Cities
+        /// <summary>
+        /// To get list of cities (including city ID and city name) from 'cities' table
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<City>>> GetCities()
         {
             if (_context.Cities == null)
