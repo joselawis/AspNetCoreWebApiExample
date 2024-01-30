@@ -1,9 +1,12 @@
 using CitiesManager.WebAPI.DataBaseContext;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder
+    .Services
+    .AddControllers(options => options.Filters.Add(new ProducesAttribute("application/json")));
 builder
     .Services
     .AddDbContext<ApplicationDbContext>(
