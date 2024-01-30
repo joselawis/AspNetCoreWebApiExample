@@ -39,7 +39,7 @@ namespace CitiesManager.WebAPI.Controllers
 
             if (city == null)
             {
-                return NotFound();
+                return Problem(detail: "Invalid City Id", statusCode: 400, title: "City search");
             }
 
             return city;
