@@ -3,6 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace CitiesManager.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomControllerBase : ControllerBase { }
 }

@@ -1,5 +1,6 @@
 using CitiesManager.WebAPI.DataBaseContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,13 @@ builder
         options.Filters.Add(new ConsumesAttribute("application/json"));
     })
     .AddXmlSerializerFormatters();
+
+builder
+    .Services
+    .AddApiVersioning(config =>
+    {
+        config.ApiVersionReader = new UrlSegmentApiVersionReader();
+    });
 
 builder
     .Services
