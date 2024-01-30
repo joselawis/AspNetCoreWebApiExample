@@ -2,6 +2,7 @@ using CitiesManager.WebAPI.DataBaseContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,9 +37,20 @@ builder
 builder.Services.AddEndpointsApiExplorer();
 builder
     .Services
-    .AddSwaggerGen(
-        options => options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"))
-    );
+    .AddSwaggerGen(options =>
+    {
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
+        options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Cities Web API", Version = "1.0" });
+        options.SwaggerDoc("v2", new OpenApiInfo() { Title = "Cities Web API", Version = "2.0" });
+    });
+
+builder
+    .Services
+    .AddVersionedApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV"; // v1
+        options.SubstituteApiVersionInUrl = true;
+    });
 
 var app = builder.Build();
 
@@ -46,7 +58,11 @@ app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
+    options.SwaggerEndpoint("/swagger/v2/swagger.json", "2.0");
+});
 
 app.UseAuthorization();
 app.MapControllers();
