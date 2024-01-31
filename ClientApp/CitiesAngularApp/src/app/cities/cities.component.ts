@@ -6,24 +6,22 @@ import { error } from 'console';
 @Component({
   selector: 'app-cities',
   templateUrl: './cities.component.html',
-  styleUrl: './cities.component.css'
+  styleUrl: './cities.component.css',
 })
 export class CitiesComponent {
   cities: City[] = [];
 
-  constructor(private citiesService: CitiesService) { }
+  constructor(private citiesService: CitiesService) {}
 
   ngOnInit() {
-    this.citiesService.getCities().subscribe(
-      {
-        next: (response: City[]) => {
-          this.cities = response
-        },
-        error: (error: any) => {
-          console.log(error)
-        },
-        complete: () => { }
-      }
-    );
+    this.citiesService.getCities().subscribe({
+      next: (response: City[]) => {
+        this.cities = response;
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+      complete: () => {},
+    });
   }
 }
