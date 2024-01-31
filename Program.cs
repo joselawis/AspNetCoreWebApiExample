@@ -56,10 +56,14 @@ builder
     .Services
     .AddCors(options =>
     {
-        options.AddDefaultPolicy(builder =>
-        {
-            builder.WithOrigins("http://localhost:4200");
-        });
+#pragma warning disable CS8604 // Posible argumento de referencia nulo
+        options.AddDefaultPolicy(
+            policyBuilder =>
+                policyBuilder.WithOrigins(
+                    builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
+                )
+        );
+#pragma warning restore CS8604 // Posible argumento de referencia nulo
     });
 
 var app = builder.Build();
