@@ -52,6 +52,16 @@ builder
         options.SubstituteApiVersionInUrl = true;
     });
 
+builder
+    .Services
+    .AddCors(options =>
+    {
+        options.AddDefaultPolicy(builder =>
+        {
+            builder.WithOrigins("http://localhost:4200");
+        });
+    });
+
 var app = builder.Build();
 
 app.UseHsts();
@@ -63,6 +73,9 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
     options.SwaggerEndpoint("/swagger/v2/swagger.json", "2.0");
 });
+
+app.UseRouting();
+app.UseCors();
 
 app.UseAuthorization();
 app.MapControllers();
