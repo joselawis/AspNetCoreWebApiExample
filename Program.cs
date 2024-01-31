@@ -59,9 +59,9 @@ builder
 #pragma warning disable CS8604 // Posible argumento de referencia nulo
         options.AddDefaultPolicy(
             policyBuilder =>
-                policyBuilder.WithOrigins(
-                    builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
-                )
+                policyBuilder
+                    .WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>())
+                    .WithHeaders("Authorization", "origin", "accept", "content-type")
         );
 #pragma warning restore CS8604 // Posible argumento de referencia nulo
     });
