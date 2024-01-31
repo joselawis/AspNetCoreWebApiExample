@@ -35,6 +35,7 @@ export class CitiesComponent {
     this.citiesService.getCities().subscribe({
       next: (response: City[]) => {
         this.cities = response;
+        this.putCityFormArray.clear();
         this.cities.forEach((city) => {
           this.putCityFormArray.push(
             new FormGroup({
@@ -73,8 +74,8 @@ export class CitiesComponent {
     this.citiesService.postCity(this.postCityForm.value).subscribe({
       next: (response: City) => {
         console.log(response);
-        this.cities.push(new City(response.cityId, response.cityName));
         this.loadCities();
+        this.postCityForm.reset();
         this.isPostCityFormSubmitted = false;
       },
       error: (error: any) => {
@@ -104,5 +105,20 @@ export class CitiesComponent {
         },
         complete: () => {},
       });
+  }
+
+  deleteClicked(city: City, index: number): void {
+    if (confirm(`Are you sure to delete this city?: ${city.cityName}`)) {
+      this.citiesService.deleteCity(city.cityId).subscribe({
+        next: (response: string) => {
+          console.log(response);
+          this.loadCities();
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+        complete: () => {},
+      });
+    }
   }
 }
