@@ -62,6 +62,7 @@ builder
                 policyBuilder
                     .WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>())
                     .WithHeaders("Authorization", "origin", "accept", "content-type")
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
         );
 #pragma warning restore CS8604 // Posible argumento de referencia nulo
     });
