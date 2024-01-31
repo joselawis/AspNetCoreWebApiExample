@@ -98,7 +98,7 @@ namespace CitiesManager.WebAPI.Controllers.v1
             _context.Cities.Add(city);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.CityId }, city);
+            return CreatedAtAction(nameof(GetCity), new { cityId = city.CityId }, city);
         }
 
         // DELETE: api/Cities/5
