@@ -52,11 +52,11 @@ builder
         options.SubstituteApiVersionInUrl = true;
     });
 
+// CORS: localhost:4200, localhost:4100
 builder
     .Services
     .AddCors(options =>
     {
-#pragma warning disable CS8604 // Posible argumento de referencia nulo
         options.AddDefaultPolicy(
             policyBuilder =>
                 policyBuilder
@@ -64,7 +64,16 @@ builder
                     .WithHeaders("Authorization", "origin", "accept", "content-type")
                     .WithMethods("GET", "POST", "PUT", "DELETE")
         );
-#pragma warning restore CS8604 // Posible argumento de referencia nulo
+        options.AddPolicy(
+            "4100Client",
+            policyBuilder =>
+                policyBuilder
+                    .WithOrigins(
+                        builder.Configuration.GetSection("AllowedOrigins2").Get<string[]>()
+                    )
+                    .WithHeaders("Authorization", "origin", "accept")
+                    .WithMethods("GET")
+        );
     });
 
 var app = builder.Build();
