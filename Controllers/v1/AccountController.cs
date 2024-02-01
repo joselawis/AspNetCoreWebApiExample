@@ -1,9 +1,7 @@
-using System.CodeDom.Compiler;
 using CitiesManager.WebAPI.DTO;
 using CitiesManager.WebAPI.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CitiesManager.WebAPI.Controllers.v1
@@ -58,6 +56,46 @@ namespace CitiesManager.WebAPI.Controllers.v1
                 var errorMessage = string.Join(" | ", result.Errors.Select(e => e.Description));
                 return Problem(errorMessage);
             }
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<ApplicationUser>> PostLogin(LoginDTO loginDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorMessage = string.Join(
+                    " | ",
+                    ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                );
+                return Problem(errorMessage);
+            }
+            var result = await _signInManager.PasswordSignInAsync(
+                loginDTO.Email,
+                loginDTO.Password,
+                isPersistent: false,
+                lockoutOnFailure: false
+            );
+
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+                if (user is null)
+                {
+                    return NoContent();
+                }
+                return Ok(new { personName = user.PersonName, email = user.Email });
+            }
+            else
+            {
+                return Problem("Invalid email or password");
+            }
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> GetLogout()
+        {
+            await _signInManager.SignOutAsync();
+            return NoContent();
         }
 
         [HttpGet]
