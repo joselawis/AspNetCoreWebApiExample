@@ -3,6 +3,7 @@ import { AccountService } from '../services/account.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginUser } from '../models/login-user';
+import { AuthenticationResponse } from '../models/authentication-response';
 
 @Component({
   selector: 'app-login',
@@ -35,10 +36,11 @@ export class LoginComponent {
     this.isLoginFormSubmitted = true;
     if (this.loginForm.valid) {
       this.accountService.postLogin(this.loginForm.value).subscribe({
-        next: (response: LoginUser) => {
+        next: (response: AuthenticationResponse) => {
           console.log(response);
           this.isLoginFormSubmitted = false;
-          this.accountService.currentUserName = response.email;
+          this.accountService.currentUserName = response.personName;
+          localStorage['token'] = response.token;
           this.router.navigate(['/cities']);
           this.loginForm.reset();
         },

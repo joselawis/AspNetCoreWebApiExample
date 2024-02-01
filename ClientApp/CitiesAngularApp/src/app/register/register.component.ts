@@ -4,6 +4,7 @@ import { AccountService } from '../services/account.service';
 import { RegisterUser } from '../models/register-user';
 import { Router } from '@angular/router';
 import { CompareValidation } from '../../../validators/custom-validators';
+import { AuthenticationResponse } from '../models/authentication-response';
 
 @Component({
   selector: 'app-register',
@@ -54,12 +55,12 @@ export class RegisterComponent {
     this.isRegisterFormSubmitted = true;
     if (this.registerForm.valid) {
       this.accountService.postRegister(this.registerForm.value).subscribe({
-        next: (response: RegisterUser) => {
+        next: (response: AuthenticationResponse) => {
           console.log(response);
           this.isRegisterFormSubmitted = false;
-
+          this.accountService.currentUserName = response.personName;
+          localStorage['token'] = response.token;
           this.router.navigate(['/cities']);
-
           this.registerForm.reset();
         },
         error: (error: any) => {
