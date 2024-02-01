@@ -1,5 +1,7 @@
 using CitiesManager.WebAPI.DataBaseContext;
 using CitiesManager.WebAPI.Identity;
+using CitiesManager.WebAPI.ServiceContracts;
+using CitiesManager.WebAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -93,6 +95,8 @@ builder
     .AddDefaultTokenProviders()
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
+builder.Services.AddTransient<IJwtService, JwtService>();
 
 var app = builder.Build();
 
