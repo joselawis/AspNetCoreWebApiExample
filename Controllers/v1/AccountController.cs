@@ -59,7 +59,7 @@ namespace CitiesManager.WebAPI.Controllers.v1
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ApplicationUser>> PostLogin(LoginDTO loginDTO)
+        public async Task<IActionResult> PostLogin(LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
             {
