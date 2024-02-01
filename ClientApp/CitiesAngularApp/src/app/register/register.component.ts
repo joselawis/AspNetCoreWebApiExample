@@ -52,20 +52,21 @@ export class RegisterComponent {
 
   registerSubmitted() {
     this.isRegisterFormSubmitted = true;
+    if (this.registerForm.valid) {
+      this.accountService.postRegister(this.registerForm.value).subscribe({
+        next: (response: RegisterUser) => {
+          console.log(response);
+          this.isRegisterFormSubmitted = false;
 
-    this.accountService.postRegister(this.registerForm.value).subscribe({
-      next: (response: RegisterUser) => {
-        console.log(response);
-        this.isRegisterFormSubmitted = false;
+          this.router.navigate(['/cities']);
 
-        this.router.navigate(['/cities']);
-
-        this.registerForm.reset();
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-      complete: () => {},
-    });
+          this.registerForm.reset();
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+        complete: () => {},
+      });
+    }
   }
 }
