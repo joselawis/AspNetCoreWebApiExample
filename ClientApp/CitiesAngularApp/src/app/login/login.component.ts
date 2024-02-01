@@ -38,9 +38,8 @@ export class LoginComponent {
         next: (response: LoginUser) => {
           console.log(response);
           this.isLoginFormSubmitted = false;
-
+          this.accountService.currentUserName = response.email;
           this.router.navigate(['/cities']);
-
           this.loginForm.reset();
         },
         error: (error: any) => {
