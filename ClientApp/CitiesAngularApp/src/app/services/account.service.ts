@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RegisterUser } from '../models/register-user';
+import { LoginUser } from '../models/login-user';
 
 const API_BASE_URL: string = 'https://localhost:7122/api/v1/account/';
 
@@ -16,5 +17,13 @@ export class AccountService {
       `${API_BASE_URL}register`,
       registerUser,
     );
+  }
+
+  public postLogin(loginUser: LoginUser): Observable<LoginUser> {
+    return this.httpClient.post<LoginUser>(`${API_BASE_URL}login`, loginUser);
+  }
+
+  public getLogout(): Observable<string> {
+    return this.httpClient.get<string>(`${API_BASE_URL}logout`);
   }
 }
