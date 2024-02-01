@@ -27,7 +27,7 @@ namespace CitiesManager.WebAPI.Controllers.v1
             _roleManager = roleManager;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDTO registerDTO)
         {
             if (!ModelState.IsValid)
@@ -42,7 +42,7 @@ namespace CitiesManager.WebAPI.Controllers.v1
             var user = new ApplicationUser()
             {
                 Email = registerDTO.Email,
-                PhoneNumber = registerDTO.Phone,
+                PhoneNumber = registerDTO.PhoneNumber,
                 UserName = registerDTO.Email,
                 PersonName = registerDTO.PersonName
             };

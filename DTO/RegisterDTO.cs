@@ -20,7 +20,7 @@ namespace CitiesManager.WebAPI.DTO
         [Required(ErrorMessage = "Phone can't be blank")]
         [RegularExpression("^[0-9]{9}$", ErrorMessage = "Please enter a valid phone number")]
         [DataType(DataType.PhoneNumber)]
-        public required string Phone { get; set; }
+        public required string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Password can't be blank")]
         [DataType(DataType.Password)]

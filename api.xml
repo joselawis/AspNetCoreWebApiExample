@@ -40,5 +40,17 @@
         <member name="M:CitiesManager.WebAPI.Migrations.RequiredCityName.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:CitiesManager.WebAPI.Migrations.IdentityChanges">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.IdentityChanges.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.IdentityChanges.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.IdentityChanges.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

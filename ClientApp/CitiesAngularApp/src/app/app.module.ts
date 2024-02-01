@@ -10,9 +10,10 @@ import { CitiesComponent } from './cities/cities.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DisableControlDirective } from './directives/disable-control.directive';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
-  declarations: [AppComponent, CitiesComponent, DisableControlDirective],
+  declarations: [AppComponent, CitiesComponent, DisableControlDirective, RegisterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
