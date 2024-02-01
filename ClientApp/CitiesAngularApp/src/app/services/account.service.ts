@@ -34,4 +34,12 @@ export class AccountService {
   public getLogout(): Observable<string> {
     return this.httpClient.get<string>(`${API_BASE_URL}logout`);
   }
+
+  public isAuthentified(): boolean {
+    return (
+      this.currentUserName !== null &&
+      this.currentUserName !== '' &&
+      this.currentUserName !== undefined
+    );
+  }
 }

@@ -8,13 +8,7 @@
 
         <div class="flex-1" id="search-box-div">
           <div class="navbar account-links">
-            <ul
-              *ngIf="
-                accountService.currentUserName === '' ||
-                accountService.currentUserName === null ||
-                accountService.currentUserName === undefined
-              "
-            >
+            <ul *ngIf="!accountService.isAuthentified()">
               <li>
                 <a [routerLink]="['/login']">Login</a>
               </li>
@@ -22,13 +16,7 @@
                 <a [routerLink]="['/register']">Register</a>
               </li>
             </ul>
-            <ul
-              *ngIf="
-                accountService.currentUserName !== '' &&
-                accountService.currentUserName !== null &&
-                accountService.currentUserName !== undefined
-              "
-            >
+            <ul *ngIf="accountService.isAuthentified()">
               <li>
                 <span>{{ accountService.currentUserName }}</span>
               </li>

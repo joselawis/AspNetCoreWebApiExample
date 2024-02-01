@@ -1,5 +1,6 @@
 using CitiesManager.WebAPI.DataBaseContext;
 using CitiesManager.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace CitiesManager.WebAPI.Controllers.v1
         /// To get list of cities (including city ID and city name) from 'cities' table
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet]
         // [Produces("application/xml")]
         public async Task<ActionResult<IEnumerable<City>>> GetCities()

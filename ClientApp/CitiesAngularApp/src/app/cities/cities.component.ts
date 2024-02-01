@@ -3,6 +3,7 @@ import { City } from '../models/city';
 import { CitiesService } from '../services/cities.service';
 import { error } from 'console';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-cities',
@@ -17,7 +18,10 @@ export class CitiesComponent {
   putCityForm: FormGroup;
   editCityId: string | null = null;
 
-  constructor(private citiesService: CitiesService) {
+  constructor(
+    private citiesService: CitiesService,
+    public accountService: AccountService,
+  ) {
     this.postCityForm = new FormGroup({
       cityName: new FormControl(null, [Validators.required]),
     });
