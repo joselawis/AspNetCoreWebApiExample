@@ -99,6 +99,8 @@ var app = builder.Build();
 app.UseHsts();
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
