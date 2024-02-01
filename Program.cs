@@ -3,7 +3,6 @@ using CitiesManager.WebAPI.DataBaseContext;
 using CitiesManager.WebAPI.Identity;
 using CitiesManager.WebAPI.ServiceContracts;
 using CitiesManager.WebAPI.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -111,7 +110,7 @@ builder
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer(options =>
     {
