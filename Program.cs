@@ -1,12 +1,18 @@
+using System.Text;
 using CitiesManager.WebAPI.DataBaseContext;
 using CitiesManager.WebAPI.Identity;
 using CitiesManager.WebAPI.ServiceContracts;
 using CitiesManager.WebAPI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +23,8 @@ builder
     {
         options.Filters.Add(new ProducesAttribute("application/json"));
         options.Filters.Add(new ConsumesAttribute("application/json"));
+        var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+        options.Filters.Add(new AuthorizeFilter(policy));
     })
     .AddXmlSerializerFormatters();
 
@@ -97,6 +105,30 @@ builder
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
 builder.Services.AddTransient<IJwtService, JwtService>();
+
+builder
+    .Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+            )
+        };
+    });
+builder.Services.AddAuthorization(options => { });
 
 var app = builder.Build();
 
