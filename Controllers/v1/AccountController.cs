@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CitiesManager.WebAPI.DTO;
 using CitiesManager.WebAPI.Identity;
 using CitiesManager.WebAPI.ServiceContracts;
@@ -120,6 +121,40 @@ namespace CitiesManager.WebAPI.Controllers.v1
             {
                 return Ok(false);
             }
+        }
+
+        [HttpPost("generate-new-jwt-token")]
+        public async Task<IActionResult> GenerateNewAccessToken(TokenModel tokenModel)
+        {
+            if (tokenModel == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+            var jwtToken = tokenModel.Token;
+            var refreshToken = tokenModel.RefreshToken;
+
+            var principal = _jwtService.GetPrincipalFromJwtToken(jwtToken);
+            if (principal == null)
+            {
+                return BadRequest("Invalid jwt access token");
+            }
+
+            var email = principal.FindFirstValue(ClaimTypes.Email);
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (
+                user == null
+                || user.RefreshToken != refreshToken
+                || user.RefreshTokenExpirationDateTime <= DateTime.UtcNow
+            )
+            {
+                return BadRequest("Invalid refresh token");
+            }
+
+            var authenticationResponse = _jwtService.CreateJwtToken(user);
+            await GenerateRefreshToken(user, authenticationResponse);
+
+            return Ok(authenticationResponse);
         }
 
         private async Task GenerateRefreshToken(

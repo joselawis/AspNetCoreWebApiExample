@@ -25,10 +25,7 @@
                 [disableControl]="city.cityId != editCityId"
               />
             </td>
-            <td
-              style="width: 200px"
-              *ngIf="this.accountService.isAuthentified()"
-            >
+            <td style="width: 200px" *ngIf="this.isAuthentified()">
               <button
                 type="button"
                 class="button button-blue-back"
@@ -58,6 +55,13 @@
         </tbody>
       </table>
     </div>
+    <button
+      type="button"
+      class="button button-blue-back mt"
+      (click)="refreshClick()"
+    >
+      Refresh Token
+    </button>
   </div>
   <div class="flex-1 w-50">
     <div class="form-container">

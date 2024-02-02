@@ -4,6 +4,7 @@ import { CitiesService } from '../services/cities.service';
 import { error } from 'console';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../services/account.service';
+import { AuthenticationResponse } from '../models/authentication-response';
 
 @Component({
   selector: 'app-cities',
@@ -20,7 +21,7 @@ export class CitiesComponent {
 
   constructor(
     private citiesService: CitiesService,
-    public accountService: AccountService,
+    private accountService: AccountService,
   ) {
     this.postCityForm = new FormGroup({
       cityName: new FormControl(null, [Validators.required]),
@@ -124,5 +125,24 @@ export class CitiesComponent {
         complete: () => {},
       });
     }
+  }
+
+  refreshClick(): void {
+    this.accountService.postGenerateNewToken().subscribe({
+      next: (response: AuthenticationResponse) => {
+        console.log(response);
+        localStorage['token'] = response.token;
+        localStorage['refreshToken'] = response.refreshToken;
+        this.loadCities();
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+      complete: () => {},
+    });
+  }
+
+  isAuthentified(): boolean {
+    return this.accountService.isAuthentified();
   }
 }

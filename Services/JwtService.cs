@@ -30,6 +30,7 @@ namespace CitiesManager.WebAPI.Services
                 new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()), // Issued at (date and time of token generation)
                 new(ClaimTypes.NameIdentifier, user.Id.ToString()), // Unique name identifier of the user (Email)
                 new(ClaimTypes.Name, user.PersonName.ToString()), // Name of the user
+                new(ClaimTypes.Email, user.Email.ToString()), // Email of the user
             };
 
             var securityKey = new SymmetricSecurityKey(
@@ -58,9 +59,7 @@ namespace CitiesManager.WebAPI.Services
                 RefreshToken = GenerateRefreshToken(),
                 RefreshTokenExpirationDateTime = DateTime
                     .UtcNow
-                    .AddMilliseconds(
-                        Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"])
-                    )
+                    .AddMinutes(Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"]))
             };
         }
 
@@ -70,6 +69,43 @@ namespace CitiesManager.WebAPI.Services
             var randomNumberGenerator = RandomNumberGenerator.Create();
             randomNumberGenerator.GetBytes(bytes);
             return Convert.ToBase64String(bytes);
+        }
+
+        public ClaimsPrincipal? GetPrincipalFromJwtToken(string? token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateAudience = true,
+                ValidAudience = _configuration["Jwt:Audience"],
+                ValidateIssuer = true,
+                ValidIssuer = _configuration["Jwt:Issuer"],
+                ValidateLifetime = false, // Should be false because we are validating expirated tokens
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
+                )
+            };
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var principal = jwtSecurityTokenHandler.ValidateToken(
+                token,
+                tokenValidationParameters,
+                out SecurityToken securityToken
+            );
+
+            if (
+                securityToken is not JwtSecurityToken jwtSecurityToken
+                || !jwtSecurityToken
+                    .Header
+                    .Alg
+                    .Equals(
+                        SecurityAlgorithms.HmacSha256,
+                        StringComparison.InvariantCultureIgnoreCase
+                    )
+            )
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+            return principal;
         }
     }
 }
