@@ -3,4 +3,6 @@ export class AuthenticationResponse {
   email: string | null = null;
   token: string | null = null;
   expiration: Date | null = null;
+  refreshToken: string | null = null;
+  refreshTokenExpirationDateTime: Date | null = null;
 }

@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using CitiesManager.WebAPI.DTO;
 using CitiesManager.WebAPI.Identity;
@@ -21,7 +22,7 @@ namespace CitiesManager.WebAPI.Services
         {
             var expirationDate = DateTime
                 .UtcNow
-                .AddMinutes(Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
+                .AddMinutes(Convert.ToInt32(_configuration["Jwt:EXPIRATION_MINUTES"]));
             var claims = new Claim[]
             {
                 new(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Subject (user id)
@@ -53,8 +54,22 @@ namespace CitiesManager.WebAPI.Services
                 Token = token,
                 Email = user.Email,
                 PersonName = user.PersonName,
-                Expiration = expirationDate
+                Expiration = expirationDate,
+                RefreshToken = GenerateRefreshToken(),
+                RefreshTokenExpirationDateTime = DateTime
+                    .UtcNow
+                    .AddMilliseconds(
+                        Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"])
+                    )
             };
+        }
+
+        private static string GenerateRefreshToken()
+        {
+            var bytes = new byte[64];
+            var randomNumberGenerator = RandomNumberGenerator.Create();
+            randomNumberGenerator.GetBytes(bytes);
+            return Convert.ToBase64String(bytes);
         }
     }
 }

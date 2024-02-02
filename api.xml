@@ -52,5 +52,29 @@
         <member name="M:CitiesManager.WebAPI.Migrations.IdentityChanges.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:CitiesManager.WebAPI.Migrations.RefreshToken">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.RefreshToken.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.RefreshToken.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.RefreshToken.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:CitiesManager.WebAPI.Migrations.RefreshTokenExpirationDateTime">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.RefreshTokenExpirationDateTime.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.RefreshTokenExpirationDateTime.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CitiesManager.WebAPI.Migrations.RefreshTokenExpirationDateTime.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
